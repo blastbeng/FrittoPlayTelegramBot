@@ -34,12 +34,14 @@ dispatcher = updater.dispatcher
 
 def ask(update: Update, context: CallbackContext):
     strid = str(update.effective_chat.id)
-    if(CHAT_ID == strid):
-        url = API_URL + API_PATH_TEXT + "ask/" + update.message.text
+    message = update.message.text[5:].strip();
+    if(message != "" and CHAT_ID == strid):
+        url = API_URL + API_PATH_TEXT + "ask/" + message
 
         response = requests.get(url)
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
-
+        if (response.text != "Internal Server Error"):
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
+            
 ask_handler = CommandHandler('ask', ask)
 dispatcher.add_handler(ask_handler)
 
