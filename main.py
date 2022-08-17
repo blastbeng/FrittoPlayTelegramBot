@@ -14,6 +14,7 @@ load_dotenv()
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
+GROUP_CHAT_ID = os.environ.get("GROUP_CHAT_ID")
 API_URL = os.environ.get("API_URL")
 API_PATH_TEXT = os.environ.get("API_PATH_TEXT")
 
@@ -35,13 +36,17 @@ dispatcher = updater.dispatcher
 def ask(update: Update, context: CallbackContext):
     strid = str(update.effective_chat.id)
     message = update.message.text[5:].strip();
-    if(message != "" and CHAT_ID == strid):
+    if(message != "" and (CHAT_ID == strid or GROUP_CHAT_ID == strid)):
         url = API_URL + API_PATH_TEXT + "ask/" + message
 
         response = requests.get(url)
         if (response.text != "Internal Server Error"):
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
-            
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+        else:
+            context.bot.delete_message(chat_id=strid, message_id=update.message.message_id)
+    else:
+        context.bot.delete_message(chat_id=strid, message_id=update.message.message_id)
+
 ask_handler = CommandHandler('ask', ask)
 dispatcher.add_handler(ask_handler)
 
