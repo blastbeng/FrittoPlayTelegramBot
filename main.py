@@ -82,7 +82,8 @@ def insult(update: Update, context: CallbackContext):
 
         response = requests.get(url)
         if (response.text != "Internal Server Error"):
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text[1:-1], disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            text = response.text.replace('"','')
+            context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
             
