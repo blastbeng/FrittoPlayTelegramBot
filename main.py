@@ -22,6 +22,7 @@ CHAT_ID = os.environ.get("CHAT_ID")
 GROUP_CHAT_ID = os.environ.get("GROUP_CHAT_ID")
 API_URL = os.environ.get("API_URL")
 API_PATH_TEXT = os.environ.get("API_PATH_TEXT")
+API_PATH_JOKES = os.environ.get("API_PATH_JOKES")
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
@@ -40,9 +41,30 @@ dispatcher = updater.dispatcher
 
 def ask(update: Update, context: CallbackContext):
     strid = str(update.effective_chat.id)
-    message = update.message.text[5:].strip();
-    if(message != "" and (CHAT_ID == strid or GROUP_CHAT_ID == strid)):
-        url = API_URL + API_PATH_TEXT + "ask/" + message
+    if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        message = update.message.text[5:].strip();
+        if(message != ""):
+            url = API_URL + API_PATH_TEXT + "ask/" + message
+
+            response = requests.get(url)
+            if (response.text != "Internal Server Error"):
+                context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            
+ask_handler = CommandHandler('ask', ask)
+dispatcher.add_handler(ask_handler)
+
+
+
+
+def chuck(update: Update, context: CallbackContext):
+    strid = str(update.effective_chat.id)
+    if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        url = API_URL + API_PATH_JOKES + "chuck"
 
         response = requests.get(url)
         if (response.text != "Internal Server Error"):
@@ -50,27 +72,25 @@ def ask(update: Update, context: CallbackContext):
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
         
-    else:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
-        
-ask_handler = CommandHandler('ask', ask)
+ask_handler = CommandHandler('chuck', chuck)
 dispatcher.add_handler(ask_handler)
 
 def search(update: Update, context: CallbackContext):
     strid = str(update.effective_chat.id)
-    message = update.message.text[8:].strip();
-    if(message != "" and (CHAT_ID == strid or GROUP_CHAT_ID == strid)):
-        url = API_URL + API_PATH_TEXT + "search/" + message
+    if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        message = update.message.text[8:].strip();
+        if(message != ""):
+            url = API_URL + API_PATH_TEXT + "search/" + message
 
-        response = requests.get(url)
-        if (response.text != "Internal Server Error"):
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            response = requests.get(url)
+            if (response.text != "Internal Server Error"):
+                context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
-        
-    else:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere una frase dopo /search", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
-        
+            context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere una frase dopo /search", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            
 ask_handler = CommandHandler('search', search)
 dispatcher.add_handler(ask_handler)
 
@@ -194,7 +214,7 @@ dispatcher.add_handler(ask_handler)
 
 def help(update: Update, context: CallbackContext):
 
-    text = "/ask <text> - chiedi qualcosa al bot\n" + "/insult <text> - insulta qualcuno o qualcosa\n" + "/search <text> - cerca qualcosa su wikipedia\n" + "/setalarm <dd-mm> <HH:MM> <text> - imposta un allarme\n" + "/unsetalarm <text> - rimuove un allarme\n" + "/restart - riavvia il bot\n" + "/help - visualizza i comandi disponibili";
+    text = "/ask <text> - chiedi qualcosa al bot\n" + "/insult <text> - insulta qualcuno o qualcosa\n" + "/search <text> - cerca qualcosa su wikipedia\n" + "/setalarm <dd-mm> <HH:MM> <text> - imposta un allarme\n" + "/unsetalarm <text> - rimuove un allarme\n" + "/chuck - Chuck Norris.\n" + "/restart - riavvia il bot\n" + "/help - visualizza i comandi disponibili";
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
            
