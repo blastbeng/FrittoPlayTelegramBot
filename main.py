@@ -22,7 +22,7 @@ CHAT_ID = os.environ.get("CHAT_ID")
 GROUP_CHAT_ID = os.environ.get("GROUP_CHAT_ID")
 API_URL = os.environ.get("API_URL")
 API_PATH_TEXT = os.environ.get("API_PATH_TEXT")
-API_PATH_JOKES = os.environ.get("API_PATH_JOKES")
+API_PATH_JOKES_TEXT = os.environ.get("API_PATH_JOKES_TEXT")
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
@@ -64,7 +64,7 @@ dispatcher.add_handler(ask_handler)
 def chuck(update: Update, context: CallbackContext):
     strid = str(update.effective_chat.id)
     if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
-        url = API_URL + API_PATH_JOKES + "chuck"
+        url = API_URL + API_PATH_JOKES_TEXT + "chuck"
 
         response = requests.get(url)
         if (response.text != "Internal Server Error"):
@@ -73,6 +73,23 @@ def chuck(update: Update, context: CallbackContext):
             context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
         
 ask_handler = CommandHandler('chuck', chuck)
+dispatcher.add_handler(ask_handler)
+
+
+
+
+def joke(update: Update, context: CallbackContext):
+    strid = str(update.effective_chat.id)
+    if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        url = API_URL + API_PATH_JOKES_TEXT + "random"
+
+        response = requests.get(url)
+        if (response.text != "Internal Server Error"):
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+        
+ask_handler = CommandHandler('joke', joke)
 dispatcher.add_handler(ask_handler)
 
 def search(update: Update, context: CallbackContext):
@@ -214,7 +231,7 @@ dispatcher.add_handler(ask_handler)
 
 def help(update: Update, context: CallbackContext):
 
-    text = "/ask <text> - chiedi qualcosa al bot\n" + "/insult <text> - insulta qualcuno o qualcosa\n" + "/search <text> - cerca qualcosa su wikipedia\n" + "/setalarm <dd-mm> <HH:MM> <text> - imposta un allarme\n" + "/unsetalarm <text> - rimuove un allarme\n" + "/chuck - Chuck Norris.\n" + "/restart - riavvia il bot\n" + "/help - visualizza i comandi disponibili";
+    text = "/ask <text> - chiedi qualcosa al bot\n" + "/insult <text> - insulta qualcuno o qualcosa\n" + "/search <text> - cerca qualcosa su wikipedia\n" + "/setalarm <dd-mm> <HH:MM> <text> - imposta un allarme\n" + "/unsetalarm <text> - rimuove un allarme\n" + "/chuck - Chuck Norris.\n" + "/joke - Barzelletta a caso\n" + "/restart - riavvia il bot\n" + "/help - visualizza i comandi disponibili";
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
            
