@@ -231,7 +231,15 @@ dispatcher.add_handler(ask_handler)
 
 def help(update: Update, context: CallbackContext):
 
-    text = "/ask <text> - chiedi qualcosa al bot\n" + "/insult <text> - insulta qualcuno o qualcosa\n" + "/search <text> - cerca qualcosa su wikipedia\n" + "/setalarm <dd-mm> <HH:MM> <text> - imposta un allarme\n" + "/unsetalarm <text> - rimuove un allarme\n" + "/chuck - Chuck Norris.\n" + "/joke - Barzelletta a caso\n" + "/restart - riavvia il bot\n" + "/help - visualizza i comandi disponibili";
+    text = "/ask <text> - chiedi qualcosa al bot\n" 
+    + "/insult <text> - insulta qualcuno o qualcosa\n" 
+    + "/search <text> - cerca qualcosa su wikipedia\n" 
+    + "/chuck - Chuck Norris.\n" 
+    + "/joke - Barzelletta a caso\n" 
+    + "/setalarm <dd-mm> <HH:MM> <text> - imposta un allarme\n" 
+    + "/unsetalarm <text> - rimuove un allarme\n" 
+    + "/restart - riavvia il bot\n" 
+    + "/help - visualizza i comandi disponibili";
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
            
