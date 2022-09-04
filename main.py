@@ -48,12 +48,12 @@ def ask(update: Update, context: CallbackContext):
 
             response = requests.get(url)
             if (response.text != "Internal Server Error"):
-                context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+                context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             
 ask_handler = CommandHandler('ask', ask)
 dispatcher.add_handler(ask_handler)
@@ -68,9 +68,9 @@ def chuck(update: Update, context: CallbackContext):
 
         response = requests.get(url)
         if (response.text != "Internal Server Error"):
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
         
 ask_handler = CommandHandler('chuck', chuck)
 dispatcher.add_handler(ask_handler)
@@ -85,9 +85,9 @@ def joke(update: Update, context: CallbackContext):
 
         response = requests.get(url)
         if (response.text != "Internal Server Error"):
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
         
 ask_handler = CommandHandler('joke', joke)
 dispatcher.add_handler(ask_handler)
@@ -101,12 +101,12 @@ def search(update: Update, context: CallbackContext):
 
             response = requests.get(url)
             if (response.text != "Internal Server Error"):
-                context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+                context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere una frase dopo /search", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere una frase dopo /search", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             
 ask_handler = CommandHandler('search', search)
 dispatcher.add_handler(ask_handler)
@@ -125,9 +125,9 @@ def insult(update: Update, context: CallbackContext):
         response = requests.get(url)
         if (response.text != "Internal Server Error"):
             text = response.text.replace('"','')
-            context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             
 ask_handler = CommandHandler('insult', insult)
 dispatcher.add_handler(ask_handler)
@@ -164,7 +164,7 @@ def set_timer(update: Update, context: CallbackContext) -> None:
         text = text.strip()
 
         if text == "":
-            update.message.reply_text('Usage: /setalarm <dd-mm> <HH:MM> <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            update.message.reply_text('Usage: /setalarm <dd-mm> <HH:MM> <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             return
 
         tz = timezone('Europe/Rome')
@@ -178,7 +178,7 @@ def set_timer(update: Update, context: CallbackContext) -> None:
         due = alarm_time - current_time
         
         if due.seconds <= 0 or due.days <=-1:
-            update.message.reply_text('Devi impostare una data futura.', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            update.message.reply_text('Devi impostare una data futura.', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             return
 
         job_removed = remove_job_if_exists(text, context)
@@ -190,7 +190,7 @@ def set_timer(update: Update, context: CallbackContext) -> None:
         update.message.reply_text(text)
 
     except (IndexError, ValueError):
-        update.message.reply_text('Usage: /setalarm <dd-mm> <HH:MM> <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+        update.message.reply_text('Usage: /setalarm <dd-mm> <HH:MM> <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
 
 
 def unset(update: Update, context: CallbackContext) -> None:
@@ -203,14 +203,14 @@ def unset(update: Update, context: CallbackContext) -> None:
         text = text.strip()
 
         if text == "":
-            update.message.reply_text('Usage: /unsetalarm <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+            update.message.reply_text('Usage: /unsetalarm <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
             return
 
         job_removed = remove_job_if_exists(text, context)
         text = 'Allarme rimosso correttamente!' if job_removed else 'Nessun allarme attivo.'
-        update.message.reply_text(text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+        update.message.reply_text(text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
     except (IndexError, ValueError):
-        update.message.reply_text('Usage: /unsetalarm <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+        update.message.reply_text('Usage: /unsetalarm <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
 
 
 
@@ -221,7 +221,7 @@ def restart(update: Update, context: CallbackContext):
 
 
     text = "Riavvio in corso..."
-    context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
 
     python = sys.executable
     os.execl(python, python, *sys.argv)
@@ -241,7 +241,7 @@ def help(update: Update, context: CallbackContext):
     + "/restart - riavvia il bot\n" 
     + "/help - visualizza i comandi disponibili";
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=True)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
            
 ask_handler = CommandHandler('help', help)
 dispatcher.add_handler(ask_handler)
