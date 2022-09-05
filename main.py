@@ -310,7 +310,7 @@ def set_timer(update: Update, context: CallbackContext) -> None:
         text = 'Allarme impostato correttamente!'
         if job_removed:
             text += ' Vecchio allarme rimosso.'
-        update.message.reply_text(text)
+        update.message.reply_text(text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
 
     except (IndexError, ValueError):
         update.message.reply_text('Usage: /setalarm <dd-mm> <HH:MM> <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
@@ -340,11 +340,51 @@ def unset(update: Update, context: CallbackContext) -> None:
 dispatcher.add_handler(CommandHandler("setalarm", set_timer))
 dispatcher.add_handler(CommandHandler("unsetalarm", unset))
 
+
+
+def set_timer_daily(update: Update, context: CallbackContext) -> None:
+    """Add a job to the queue."""
+    chat_id = update.message.chat_id
+    try:
+        # args[0] should contain the time for the timer in seconds
+        text = ""
+
+        for i in range(len(context.args)):
+            if i > 0:
+                text = text + " " + context.args[i]
+
+        text = text.strip()
+
+        if text == "":
+            update.message.reply_text('Usage: /setalarm <HH:MM> <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+            return
+
+        splitted =  context.args[0].split(":")
+
+        hour = int(splitted[0])
+        minute = int(splitted[1])
+
+        tz = timezone('Europe/Rome')
+        alarmtime = datetime.now(tz = tz).replace(hour=hour, minute=minute, second=0, microsecond=0)
+
+        job_removed = remove_job_if_exists(text, context)
+        context.job_queue.run_daily(alarm, time=alarmtime, context=chat_id, name=text)
+
+        text = 'Allarme impostato correttamente!'
+        if job_removed:
+            text += ' Vecchio allarme rimosso.'
+        update.message.reply_text(text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+    except (IndexError, ValueError):
+        update.message.reply_text('Usage: /setalarm <HH:MM> <text>', disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+dispatcher.add_handler(CommandHandler("setalarmdaily", set_timer_daily))
+
 def restart(update: Update, context: CallbackContext):
     try:
 
 
-        text = "Riavvio in corso..."
+        text = "Riavvio in corso... (Tutti gli allarmi verranno rimossi)"
         context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
 
         python = sys.executable
@@ -370,7 +410,8 @@ def help(update: Update, context: CallbackContext):
     text = text + "help - visualizza i comandi disponibili\n"
     text = text + "restart - riavvia il bot\n"
     text = text + "search - cerca qualcosa su wikipedia\n"
-    text = text + "setalarm - imposta un allarme\n"
+    text = text + "setalarm - allarme singolo\n"
+    text = text + "setalarmdaily - allarme giornaliero\n"
     text = text + "speak - ripete il messaggio via audio\n"
     text = text + "unsetalarm - rimuove un allarme\n";
 
