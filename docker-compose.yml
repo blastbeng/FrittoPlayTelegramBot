@@ -1,0 +1,11 @@
+---
+version: "3.3"
+services:
+  scemo-pezzente-telegram:
+    container_name: scemo-pezzente-telegram
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    image: "scemo-pezzente-telegram:latest"
+    restart: "no"
