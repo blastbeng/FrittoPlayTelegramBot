@@ -6,6 +6,7 @@ import json
 import requests
 import time
 import sys
+from io import BytesIO
 from datetime import datetime, timedelta
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -22,6 +23,7 @@ CHAT_ID = os.environ.get("CHAT_ID")
 GROUP_CHAT_ID = os.environ.get("GROUP_CHAT_ID")
 API_URL = os.environ.get("API_URL")
 API_PATH_TEXT = os.environ.get("API_PATH_TEXT")
+API_PATH_AUDIO = os.environ.get("API_PATH_AUDIO")
 API_PATH_JOKES_TEXT = os.environ.get("API_PATH_JOKES_TEXT")
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -67,6 +69,65 @@ ask_handler = CommandHandler('ask', ask)
 dispatcher.add_handler(ask_handler)
 
 
+def askaudio(update: Update, context: CallbackContext):
+    try:
+        strid = str(update.effective_chat.id)
+        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+            message = update.message.text[10:].strip();
+            if(message != ""):
+                url = API_URL + API_PATH_AUDIO + "ask/" + message
+
+                response = requests.get(url)
+                if (response.text != "Internal Server Error"):
+                    audio = BytesIO(response.content)
+                    context.bot.send_audio(chat_id=update.effective_chat.id, audio=audio, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False, title="Messaggio vocale dal Pezzente", filename="Messaggio vocale dal pezzente")
+                else:
+                    context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /askaudio", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+               
+    except Exception as e:
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      context.bot.send_message(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+          
+ask_handler = CommandHandler('askaudio', askaudio)
+dispatcher.add_handler(ask_handler)
+
+
+
+def speak(update: Update, context: CallbackContext):
+    try:
+        strid = str(update.effective_chat.id)
+        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+            message = update.message.text[7:].strip();
+            if(message != ""):
+                url = API_URL + API_PATH_AUDIO + "repeat/learn/" + message
+
+                response = requests.get(url)
+                if (response.text != "Internal Server Error" and response.content):
+                    audio = BytesIO(response.content)
+                    context.bot.send_audio(chat_id=update.effective_chat.id, audio=audio, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False, title="Messaggio vocale dal Pezzente", filename="Messaggio vocale dal pezzente")
+                else:
+                    context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che ripeto qualcosa devi scrivere una frase dopo /speak", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+               
+    except Exception as e:
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      context.bot.send_message(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+          
+ask_handler = CommandHandler('speak', speak)
+dispatcher.add_handler(ask_handler)
+
+
 def chuck(update: Update, context: CallbackContext):
     try:
         strid = str(update.effective_chat.id)
@@ -83,7 +144,7 @@ def chuck(update: Update, context: CallbackContext):
       exc_type, exc_obj, exc_tb = sys.exc_info()
       fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
       print(exc_type, fname, exc_tb.tb_lineno)
-      context.bot.send_message(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+      context.bot.send_amessage(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
 
 ask_handler = CommandHandler('chuck', chuck)
 dispatcher.add_handler(ask_handler)
@@ -164,6 +225,34 @@ def insult(update: Update, context: CallbackContext):
       context.bot.send_message(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
 
 ask_handler = CommandHandler('insult', insult)
+dispatcher.add_handler(ask_handler)
+
+
+
+def insultaudio(update: Update, context: CallbackContext):
+    try:
+        strid = str(update.effective_chat.id)
+        message = update.message.text[13:].strip();
+        if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+            if message != "":
+                url = API_URL + API_PATH_AUDIO + "insult?text=" + message
+            else:
+                url = API_URL + API_PATH_AUDIO + "insult"
+
+            response = requests.get(url)
+            if (response.text != "Internal Server Error"):
+                audio = BytesIO(response.content)
+                context.bot.send_audio(chat_id=update.effective_chat.id, audio=audio, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False, title="Messaggio vocale dal Pezzente", filename="Messaggio vocale dal pezzente")
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                
+    except Exception as e:
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      context.bot.send_message(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+ask_handler = CommandHandler('insultaudio', insultaudio)
 dispatcher.add_handler(ask_handler)
 
 
@@ -272,14 +361,17 @@ dispatcher.add_handler(ask_handler)
 
 def help(update: Update, context: CallbackContext):
 
-    text = "ask - chiedi qualcosa al bot\n"
+    text = "ask - chiedi qualcosa (text)\n"
+    text = text + "askaudio - chiedi qualcosa (audio)\n"
     text = text + "chuck - Chuck Norris.\n"
-    text = text + "insult - insulta qualcuno o qualcosa\n"
+    text = text + "insult - genera insulti (text)\n"
+    text = text + "insultaudio - genera insulti (audio)\n"
     text = text + "joke - barzelletta a caso\n"
     text = text + "help - visualizza i comandi disponibili\n"
     text = text + "restart - riavvia il bot\n"
     text = text + "search - cerca qualcosa su wikipedia\n"
     text = text + "setalarm - imposta un allarme\n"
+    text = text + "speak - ripete il messaggio via audio\n"
     text = text + "unsetalarm - rimuove un allarme\n";
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
