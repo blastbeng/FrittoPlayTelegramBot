@@ -56,8 +56,8 @@ def ask(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[5:].strip();
-            if(message != ""):
-                url = API_URL + API_PATH_TEXT + "ask/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100):
+                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -66,7 +66,7 @@ def ask(update: Update, context: CallbackContext):
                     context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -83,8 +83,8 @@ def echo(update: Update, context: CallbackContext):
         #if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text
-            if(message != ""):
-                url = API_URL + API_PATH_TEXT + "ask/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100):
+                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -93,7 +93,7 @@ def echo(update: Update, context: CallbackContext):
                     context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -109,8 +109,8 @@ def askaudio(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[10:].strip();
-            if(message != ""):
-                url = API_URL + API_PATH_TEXT + "ask/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100):
+                url = API_URL + API_PATH_AUDIO + "ask/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -120,7 +120,7 @@ def askaudio(update: Update, context: CallbackContext):
                     context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /askaudio", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /askaudio (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -138,8 +138,8 @@ def speak(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[7:].strip();
-            if(message != ""):
-                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100):
+                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error" and response.content):
@@ -149,7 +149,7 @@ def speak(update: Update, context: CallbackContext):
                     context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che ripeto qualcosa devi scrivere una frase dopo /speak", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che ripeto qualcosa devi scrivere una frase dopo /speak (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -165,7 +165,7 @@ def image(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[7:].strip();
-            if(message != ""):
+            if(message != "" and len(message) <= 100):
 
                 img_url = API_URL + API_PATH_IMAGES + "search/" + urllib.parse.quote(message)
 
@@ -177,7 +177,7 @@ def image(update: Update, context: CallbackContext):
                 
                                       
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco un immagine devi scrivere qualcosa dopo /image", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco un immagine devi scrivere qualcosa dopo /image (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -283,7 +283,7 @@ def search(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[8:].strip();
-            if(message != ""):
+            if(message != "" and len(message) <= 100):
                 url = API_URL + API_PATH_TEXT + "search/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
@@ -293,7 +293,7 @@ def search(update: Update, context: CallbackContext):
                     context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere qualcosa dopo /search", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere qualcosa dopo /search (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                     
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -308,7 +308,7 @@ def searchaudio(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[13:].strip();
-            if(message != ""):
+            if(message != "" and len(message) <= 100):
                 url = API_URL + API_PATH_AUDIO + "search/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
@@ -319,7 +319,7 @@ def searchaudio(update: Update, context: CallbackContext):
                     context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere qualcosa dopo /search", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che cerco qualcosa devi scrivere qualcosa dopo /search (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                     
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
