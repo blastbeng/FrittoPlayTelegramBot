@@ -8,6 +8,7 @@ import time
 import sys
 import string
 import random
+import urllib
 from io import BytesIO
 from datetime import datetime, timedelta
 from os.path import join, dirname
@@ -56,7 +57,7 @@ def ask(update: Update, context: CallbackContext):
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[5:].strip();
             if(message != ""):
-                url = API_URL + API_PATH_TEXT + "ask/" + message
+                url = API_URL + API_PATH_TEXT + "ask/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -76,6 +77,32 @@ def ask(update: Update, context: CallbackContext):
           
 dispatcher.add_handler(CommandHandler('ask', ask))
 
+def echo(update: Update, context: CallbackContext):
+    try:
+        strid = str(update.effective_chat.id)
+        #if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+            message = update.message.text
+            if(message != ""):
+                url = API_URL + API_PATH_TEXT + "ask/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
+
+                response = requests.get(url)
+                if (response.text != "Internal Server Error"):
+                    context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                else:
+                    context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi dirmi o chiedermi qualcosa devi scrivere una frase dopo /ask", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+               
+    except Exception as e:
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      context.bot.send_message(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+
+dispatcher.add_handler(MessageHandler(Filters.text & (~Filters.command), echo))
 
 def askaudio(update: Update, context: CallbackContext):
     try:
@@ -83,7 +110,7 @@ def askaudio(update: Update, context: CallbackContext):
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[10:].strip();
             if(message != ""):
-                url = API_URL + API_PATH_AUDIO + "ask/" + message
+                url = API_URL + API_PATH_TEXT + "ask/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -112,7 +139,7 @@ def speak(update: Update, context: CallbackContext):
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[7:].strip();
             if(message != ""):
-                url = API_URL + API_PATH_AUDIO + "repeat/learn/" + message
+                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + update.message.chat.username + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error" and response.content):
@@ -140,7 +167,7 @@ def image(update: Update, context: CallbackContext):
             message = update.message.text[7:].strip();
             if(message != ""):
 
-                img_url = API_URL + API_PATH_IMAGES + "search/" + message
+                img_url = API_URL + API_PATH_IMAGES + "search/" + urllib.parse.quote(message)
 
                 response = requests.get(img_url, stream=True)
                 if (response.text != "Internal Server Error" and response.content):
@@ -257,7 +284,7 @@ def search(update: Update, context: CallbackContext):
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[8:].strip();
             if(message != ""):
-                url = API_URL + API_PATH_TEXT + "search/" + message
+                url = API_URL + API_PATH_TEXT + "search/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -282,7 +309,7 @@ def searchaudio(update: Update, context: CallbackContext):
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[13:].strip();
             if(message != ""):
-                url = API_URL + API_PATH_AUDIO + "search/" + message
+                url = API_URL + API_PATH_AUDIO + "search/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -310,7 +337,7 @@ def insult(update: Update, context: CallbackContext):
         message = update.message.text[8:].strip();
         if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
             if message != "":
-                url = API_URL + API_PATH_TEXT + "insult?text=" + message
+                url = API_URL + API_PATH_TEXT + "insult?text=" + urllib.parse.quote(message)
             else:
                 url = API_URL + API_PATH_TEXT + "insult"
 
@@ -337,7 +364,7 @@ def insultaudio(update: Update, context: CallbackContext):
         message = update.message.text[13:].strip();
         if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
             if message != "":
-                url = API_URL + API_PATH_AUDIO + "insult?text=" + message
+                url = API_URL + API_PATH_AUDIO + "insult?text=" + urllib.parse.quote(message)
             else:
                 url = API_URL + API_PATH_AUDIO + "insult"
 
