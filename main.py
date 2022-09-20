@@ -30,6 +30,8 @@ API_PATH_AUDIO = os.environ.get("API_PATH_AUDIO")
 API_PATH_JOKES_TEXT = os.environ.get("API_PATH_JOKES_TEXT")
 API_PATH_JOKES_AUDIO = os.environ.get("API_PATH_JOKES_AUDIO")
 API_PATH_IMAGES = os.environ.get("API_PATH_IMAGES")
+API_PATH_UTILS = os.environ.get("API_PATH_UTILS")
+BOT_NAME = os.environ.get("BOT_NAME")
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
@@ -56,8 +58,8 @@ def ask(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[5:].strip();
-            if(message != "" and len(message) <= 100):
-                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
+                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -77,14 +79,42 @@ def ask(update: Update, context: CallbackContext):
           
 dispatcher.add_handler(CommandHandler('ask', ask))
 
+
+
+def generate(update: Update, context: CallbackContext):
+    try:
+        strid = str(update.effective_chat.id)
+        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+            message = update.message.text[9:].strip();
+            if(message != "" and len(message) <= 100 and not message.startswith(BOT_NAME)):
+                url = API_URL + API_PATH_UTILS + "/sentence/populate/parsed/api/" + urllib.parse.quote(message)
+
+                response = requests.get(url)
+                if (response.text != "Internal Server Error"):
+                    context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                else:
+                    context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che genero conversazioni casuali devi scrivere qualcosa dopo /generate (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+               
+    except Exception as e:
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      context.bot.send_message(chat_id=update.effective_chat.id, text="Errore!", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+          
+dispatcher.add_handler(CommandHandler('generate', generate))
+
 def echo(update: Update, context: CallbackContext):
     try:
         strid = str(update.effective_chat.id)
         #if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text
-            if(message != "" and len(message) <= 100):
-                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
+                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -109,8 +139,8 @@ def askaudio(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[10:].strip();
-            if(message != "" and len(message) <= 100):
-                url = API_URL + API_PATH_AUDIO + "ask/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
+                url = API_URL + API_PATH_AUDIO + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -138,8 +168,8 @@ def speak(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[7:].strip();
-            if(message != "" and len(message) <= 100):
-                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(update.message.chat.username) + "/" + urllib.parse.quote(message)
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
+                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error" and response.content):
@@ -165,7 +195,7 @@ def image(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[7:].strip();
-            if(message != "" and len(message) <= 100):
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
 
                 img_url = API_URL + API_PATH_IMAGES + "search/" + urllib.parse.quote(message)
 
@@ -283,7 +313,7 @@ def search(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[8:].strip();
-            if(message != "" and len(message) <= 100):
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
                 url = API_URL + API_PATH_TEXT + "search/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
@@ -308,7 +338,7 @@ def searchaudio(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[13:].strip();
-            if(message != "" and len(message) <= 100):
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
                 url = API_URL + API_PATH_AUDIO + "search/" + urllib.parse.quote(message)
 
                 response = requests.get(url)
@@ -535,6 +565,7 @@ def help(update: Update, context: CallbackContext):
     text = text + "image - ricerca immagini\n"
     text = text + "insult - genera insulti (text)\n"
     text = text + "insultaudio - genera insulti (audio)\n"
+    text = text + "generate - genera conversazioni data una parola\n"
     text = text + "joke - barzelletta (text)\n"
     text = text + "jokeaudio - barzelletta (audio)\n"
     text = text + "help - visualizza i comandi\n"
