@@ -86,17 +86,21 @@ def generate(update: Update, context: CallbackContext):
         strid = str(update.effective_chat.id)
         if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
             message = update.message.text[9:].strip();
+            url = ""
             if(message != "" and len(message) <= 100 and not message.startswith(BOT_NAME)):
                 url = API_URL + API_PATH_UTILS + "/sentence/populate/parsed/api/" + urllib.parse.quote(message)
+            elif(message == ""):
+                url = API_URL + API_PATH_UTILS + "/sentence/populate/api"
+                
 
+            if url != "":
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
                     context.bot.send_message(chat_id=update.effective_chat.id, text=response.text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 else:
-                    context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
-                
+                    context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)       
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che genero conversazioni casuali devi scrivere qualcosa dopo /generate (massimo 100 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che genero conversazioni casuali devi scrivere qualcosa dopo /generate (massimo 100 caratteri) oppure lasciare vuoto", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -562,10 +566,10 @@ def help(update: Update, context: CallbackContext):
     text = text + "askaudio - chiedi qualcosa (audio)\n"
     text = text + "chuck - Chuck Norris. (text)\n"
     text = text + "chuckaudio - Chuck Norris. (audio)\n"
+    text = text + "generate - genera frasi casuali\n"
     text = text + "image - ricerca immagini\n"
     text = text + "insult - genera insulti (text)\n"
     text = text + "insultaudio - genera insulti (audio)\n"
-    text = text + "generate - genera conversazioni data una parola\n"
     text = text + "joke - barzelletta (text)\n"
     text = text + "jokeaudio - barzelletta (audio)\n"
     text = text + "help - visualizza i comandi\n"
