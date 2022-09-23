@@ -55,11 +55,15 @@ def get_random_string(length):
 
 def ask(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text[5:].strip();
             if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
-                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
+                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -83,14 +87,18 @@ dispatcher.add_handler(CommandHandler('ask', ask))
 
 def generate(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text[9:].strip();
             url = ""
             if(message != "" and len(message) <= 100 and not message.startswith(BOT_NAME)):
-                url = API_URL + API_PATH_UTILS + "/sentence/populate/parsed/api/" + urllib.parse.quote(message)
+                url = API_URL + API_PATH_UTILS + "/sentence/populate/parsed/api/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid)
             elif(message == ""):
-                url = API_URL + API_PATH_UTILS + "/sentence/populate/api"
+                url = API_URL + API_PATH_UTILS + "/sentence/populate/api" + "/" + urllib.parse.quote(strid)
                 
 
             if url != "":
@@ -113,12 +121,15 @@ dispatcher.add_handler(CommandHandler('generate', generate))
 
 def echo(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        #if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text
             if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
-                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
+                url = API_URL + API_PATH_TEXT + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -140,11 +151,15 @@ dispatcher.add_handler(MessageHandler(Filters.text & (~Filters.command), echo))
 
 def askaudio(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text[10:].strip();
             if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
-                url = API_URL + API_PATH_AUDIO + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
+                url = API_URL + API_PATH_AUDIO + "ask/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error"):
@@ -169,11 +184,15 @@ dispatcher.add_handler(CommandHandler('askaudio', askaudio))
 
 def speak(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text[7:].strip();
             if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
-                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message)
+                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error" and response.content):
@@ -196,8 +215,12 @@ dispatcher.add_handler(CommandHandler('speak', speak))
 
 def image(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text[7:].strip();
             if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
 
@@ -224,8 +247,12 @@ dispatcher.add_handler(CommandHandler('image', image))
 
 def chuck(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             url = API_URL + API_PATH_JOKES_TEXT + "chuck"
 
             response = requests.get(url)
@@ -247,8 +274,12 @@ dispatcher.add_handler(CommandHandler('chuck', chuck))
 
 def joke(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             url = API_URL + API_PATH_JOKES_TEXT + "random"
 
             response = requests.get(url)
@@ -270,8 +301,12 @@ dispatcher.add_handler(CommandHandler('joke', joke))
 
 def jokeaudio(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             url = API_URL + API_PATH_JOKES_AUDIO + "random"
 
             response = requests.get(url)
@@ -293,8 +328,12 @@ dispatcher.add_handler(CommandHandler('jokeaudio', jokeaudio))
 
 def chuckaudio(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             url = API_URL + API_PATH_JOKES_AUDIO + "chuck"
 
             response = requests.get(url)
@@ -314,8 +353,12 @@ dispatcher.add_handler(CommandHandler('chuckaudio', chuckaudio))
 
 def search(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text[8:].strip();
             if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
                 url = API_URL + API_PATH_TEXT + "search/" + urllib.parse.quote(message)
@@ -339,8 +382,12 @@ dispatcher.add_handler(CommandHandler('search', search))
 
 def searchaudio(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        if((CHAT_ID == strid or GROUP_CHAT_ID == strid)):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             message = update.message.text[13:].strip();
             if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
                 url = API_URL + API_PATH_AUDIO + "search/" + urllib.parse.quote(message)
@@ -367,13 +414,16 @@ dispatcher.add_handler(CommandHandler('searchaudio', searchaudio))
 
 def insult(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        message = update.message.text[8:].strip();
-        if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             if message != "":
-                url = API_URL + API_PATH_TEXT + "insult?text=" + urllib.parse.quote(message)
+                url = API_URL + API_PATH_TEXT + "insult?text=" + urllib.parse.quote(message) + "&chatid=" + urllib.parse.quote(strid)
             else:
-                url = API_URL + API_PATH_TEXT + "insult"
+                url = API_URL + API_PATH_TEXT + "insult?chatid=" + urllib.parse.quote(strid)
 
             response = requests.get(url)
             if (response.text != "Internal Server Error"):
@@ -394,13 +444,16 @@ dispatcher.add_handler(CommandHandler('insult', insult))
 
 def insultaudio(update: Update, context: CallbackContext):
     try:
-        strid = str(update.effective_chat.id)
-        message = update.message.text[13:].strip();
-        if(CHAT_ID == strid or GROUP_CHAT_ID == strid):
+        chatid = str(update.effective_chat.id)
+        if((CHAT_ID == chatid or GROUP_CHAT_ID == chatid)):
+            strid = "000000"
+        else:
+            strid = chatid
+        if strid:
             if message != "":
-                url = API_URL + API_PATH_AUDIO + "insult?text=" + urllib.parse.quote(message)
+                url = API_URL + API_PATH_TEXT + "insult?text=" + urllib.parse.quote(message) + "&chatid=" + urllib.parse.quote(strid)
             else:
-                url = API_URL + API_PATH_AUDIO + "insult"
+                url = API_URL + API_PATH_TEXT + "insult?chatid=" + urllib.parse.quote(strid)
 
             response = requests.get(url)
             if (response.text != "Internal Server Error"):
