@@ -420,7 +420,8 @@ def insult(update: Update, context: CallbackContext):
         else:
             strid = chatid
         if strid:
-            if message != "":
+            message = update.message.text[8:].strip();
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
                 url = API_URL + API_PATH_TEXT + "insult?text=" + urllib.parse.quote(message) + "&chatid=" + urllib.parse.quote(strid)
             else:
                 url = API_URL + API_PATH_TEXT + "insult?chatid=" + urllib.parse.quote(strid)
@@ -450,7 +451,8 @@ def insultaudio(update: Update, context: CallbackContext):
         else:
             strid = chatid
         if strid:
-            if message != "":
+            message = update.message.text[13:].strip();
+            if(message != "" and len(message) <= 100  and not message.startswith(BOT_NAME)):
                 url = API_URL + API_PATH_TEXT + "insult?text=" + urllib.parse.quote(message) + "&chatid=" + urllib.parse.quote(strid)
             else:
                 url = API_URL + API_PATH_TEXT + "insult?chatid=" + urllib.parse.quote(strid)
