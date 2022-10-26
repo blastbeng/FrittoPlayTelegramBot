@@ -190,9 +190,31 @@ def speak(update: Update, context: CallbackContext):
         #else:
         #    strid = chatid
         if strid:
-            message = update.message.text[7:].strip();
+            userinput = update.message.text[7:].strip();
+            splitted = userinput.split("-")
+            message = splitted[0].strip()
             if(message != "" and len(message) <= 500  and not message.endswith('bot')):
-                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid) + "/null"
+
+                voices = { 
+                    "google":            "google",    
+                    "caparezza":         "TM:nk1h2vqxhzdc",
+                    "gerry scotti":      "TM:5ggf3m5w2mhq",
+                    "maria de filippi":  "TM:7r48p42sbqej",
+                    "mario giordano":    "TM:xd8srfb4v5w6",
+                    "papa francesco":    "TM:8bqjb9x51vz3",
+                    "silvio berlusconi": "TM:22e5sxvt2dvk"
+                }
+                
+                if len(splitted) == 2:
+                    sel_voice = splitted[1].strip()
+                    if sel_voice in voices:
+                        voice = voices[sel_voice]
+                    else:
+                        voice = "google"
+                else:
+                    voice = "google"
+
+                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid) + "/" + urllib.parse.quote(voice)
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error" and response.content):
@@ -202,7 +224,13 @@ def speak(update: Update, context: CallbackContext):
                     context.bot.send_message(chat_id=update.effective_chat.id, text="si è verificato un errore stronzo", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                 
             else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text="se vuoi che ripeto qualcosa devi scrivere una frase dopo /speak (massimo 500 caratteri)", disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+
+                text = "se vuoi che ripeto qualcosa devi scrivere una frase dopo /speak (massimo 500 caratteri).\n\n\n"
+                text = text + "PS: se vuoi customizzare la voce aggiungi:\n"
+                text = text + "'- modello vocale' al fondo della frase.\n\n"
+                text = text + "Esempio: '/speak ciao - gerry scotti'.\n\n"
+                text = text + "Usa /listvoices per una lista dei modelli disponibili."
+                context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
                
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -212,6 +240,21 @@ def speak(update: Update, context: CallbackContext):
 
           
 dispatcher.add_handler(CommandHandler('speak', speak))
+
+def listvoices(update: Update, context: CallbackContext):
+
+    text = "lista dei modelli vocali disponibili:\n"
+    text = text + "- google\n"
+    text = text + "- caparezza\n"
+    text = text + "- gerry scotti\n"
+    text = text + "- maria de filippi\n"
+    text = text + "- mario giordano\n"
+    text = text + "- papa francesco\n"
+    text = text + "- silvio berlusconi\n"
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text=text, disable_notification=True, reply_to_message_id=update.message.message_id, protect_content=False)
+           
+dispatcher.add_handler(CommandHandler('listvoices', listvoices))
 
 def image(update: Update, context: CallbackContext):
     try:
