@@ -192,7 +192,7 @@ def speak(update: Update, context: CallbackContext):
         if strid:
             message = update.message.text[7:].strip();
             if(message != "" and len(message) <= 500  and not message.endswith('bot')):
-                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid)
+                url = API_URL + API_PATH_AUDIO + "repeat/learn/user/" + urllib.parse.quote(str(update.message.chat.id)) + "/" + urllib.parse.quote(message) + "/" + urllib.parse.quote(strid) + "/null"
 
                 response = requests.get(url)
                 if (response.text != "Internal Server Error" and response.content):
