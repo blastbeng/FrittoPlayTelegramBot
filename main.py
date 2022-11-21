@@ -206,7 +206,7 @@ def speak(update: Update, context: CallbackContext):
                 }
                 
                 if len(splitted) == 2:
-                    sel_voice = splitted[1].strip()
+                    sel_voice = splitted[1].lower().strip()
                     if sel_voice in voices:
                         voice = voices[sel_voice]
                     else:
@@ -671,6 +671,7 @@ def help(update: Update, context: CallbackContext):
     text = text + "joke - barzelletta (text)\n"
     text = text + "jokeaudio - barzelletta (audio)\n"
     text = text + "help - visualizza i comandi\n"
+    text = text + "listvoices - elenca i modelli vocali\n"
     text = text + "restart - riavvia il bot\n"
     text = text + "search - ricerca wikipedia (text)\n"
     text = text + "searchaudio - ricerca wikipedia (audio)\n"
