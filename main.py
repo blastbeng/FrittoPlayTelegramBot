@@ -198,9 +198,11 @@ def speak(update: Update, context: CallbackContext):
                 voices = { 
                     "google":            "google",    
                     "caparezza":         "TM:nk1h2vqxhzdc",
+                    "goku":              "TM:eb0rmkq6fxtj",
                     "gerry scotti":      "TM:5ggf3m5w2mhq",
                     "maria de filippi":  "TM:7r48p42sbqej",
-                    "mario giordano":    "TM:xd8srfb4v5w6",
+                    "mario giordano":    "TM:xd8srfb4v5w6",        
+                    "paolo bonolis":     "TM:zdag8n18q9ct",
                     "papa francesco":    "TM:8bqjb9x51vz3",
                     "silvio berlusconi": "TM:22e5sxvt2dvk"
                 }
@@ -247,8 +249,10 @@ def listvoices(update: Update, context: CallbackContext):
     text = text + "- google\n"
     text = text + "- caparezza\n"
     text = text + "- gerry scotti\n"
+    text = text + "- goku\n"
     text = text + "- maria de filippi\n"
     text = text + "- mario giordano\n"
+    text = text + "- paolo bonolis\n"
     text = text + "- papa francesco\n"
     text = text + "- silvio berlusconi\n"
 
