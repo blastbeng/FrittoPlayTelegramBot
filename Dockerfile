@@ -39,7 +39,7 @@ RUN pip3 install -r requirements.txt
 #USER root
 WORKDIR /app
 
-COPY .env .
+#COPY .env .
 COPY main.py .
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
