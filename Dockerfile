@@ -30,6 +30,8 @@ ENV LANG it_IT.UTF-8
 ENV LANGUAGE it_IT:it  
 ENV LC_ALL it_IT.UTF-8
 
+RUN pip3 install --no-cache --upgrade pip setuptools
+
 COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
